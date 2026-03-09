@@ -15,7 +15,7 @@ menu = [
     "🤔 ABOUT"
 ]
 
-menu = st.sidebar.radio("MENU",
+menu = st.sidebar.selectbox("MENU",
     menu,
     index=menu.index(st.session_state.menu)
 )
@@ -52,12 +52,11 @@ elif menu == "📝 REGISTRATION FORM":
     tab1,tab2 = st.tabs(["LOGIN", "REGISTER"])
 
     with tab1:
-        st.write("Calories burned estimate")
-        st.metric("Calories", "350 kcal")
+        username = st.text_input("USERNAME:")
+        password = st.text_input("PASSWORD:")
 
     with tab2:
-        st.write("Fitness Tips")
-        st.info("Stay hydrated and maintain proper form.")
+        st.text("register")
 
 
 #DAILY PLANNER
