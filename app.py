@@ -63,7 +63,8 @@ if menu == "🏠 HOME":
 
 #REGI FORM PAGE
 elif menu == "📝 LOGIN/REGISTER":
-    st.title("GYMBROOO 💪😤 almost there! ")
+    st.header("REGISTER/LOGIN TO BECOME OUR GYM BUDDY")
+    st.write("After you register you also become a part of our physical gym membership")
     tab1,tab2 = st.tabs(["LOGIN", "REGISTER"])
 
 #TEMPORARYLY STORE USERNAME AND PASSWORD
@@ -102,10 +103,9 @@ elif menu == "📝 LOGIN/REGISTER":
             st.write("""
         By using this Workout Planner app, you agree to the following:
 
-        1. This app is for educational and personal fitness planning only.
-        2. The developers are not responsible for any injuries from workouts.
-        3. Do not share your account credentials with others.
-        4. Use the app responsibly and follow proper exercise safety guidelines.
+        1. The developers are not responsible for any injuries from workouts.
+        2. Do not share your account credentials with others.
+        3. Use the app responsibly and follow proper exercise safety guidelines.
         """)
 #REGISTER BHTTON
         agree = st.checkbox("I agree to the Terms and Conditions")
@@ -131,7 +131,7 @@ elif menu == "💪 WORKOUT PLANNER":
         st.session_state.menu = "📝 LOGIN/REGISTER"
         st.rerun()
 #WORKOHT INFO
-    st.title("LET'S GET STARTED")
+    st.header("LET'S GET STARTED")
     st.subheader("Set your workout plan")
 
 #INPHT FIELDS
@@ -185,21 +185,39 @@ elif menu == "✍️ PROGRESS TRACKER":
     if len(st.session_state.workouts) == 0:
         st.info("No workouts logged yet. Start logging your workouts in the WORKOUT PLANNER!")
     else:
-        for workout in st.session_state.workouts:
-            st.write(f"**Date:** {workout['date']}")
-            st.write(f"**Name:** {workout['name']}")
-            st.write(f"**Age:** {workout['age']}")
-            st.write(f"**Weight:** {workout['weight']} kg")
-            st.write(f"**Height:** {workout['height']} cm")
-            st.write(f"**Workout Type:** {workout['workout']}")
-            st.write(f"**Exercises:** {', '.join(workout['exercises'])}")
-            st.write(f"**Duration:** {workout['duration']} minutes")
-            st.write(f"**Time:** {workout['time']}")
- 
-        MET = MET_VALUES.get(workout['exercises'][0], 1)
-        calories_burned = (MET * workout['weight'] * workout['duration']) / 60
-        st.write(f"**Estimated Calories Burned:** {calories_burned:.2f} kcal")
-        
+         for workout in st.session_state.workouts:
+             tab1, tab2, tab3 = st.tabs(["Workout Details", "Calories Burned", "Workout Picture/Notes"])
+             with tab1:
+                 st.write(f"**Date:** {workout['date']}")
+                 st.write(f"**Name:** {workout['name']}")
+                 st.write(f"**Age:** {workout['age']}")
+                 st.write(f"**Weight:** {workout['weight']} kg")
+                 st.write(f"**Height:** {workout['height']} cm")
+                 st.write(f"**Workout Type:** {workout['workout']}")
+                 st.write(f"**Exercises:** {', '.join(workout['exercises'])}")
+                 st.write(f"**Duration:** {workout['duration']} minutes")
+                 st.write(f"**Time:** {workout['time']}")
+
+             with tab2:
+                 exercises = workout.get("exercises", [])
+
+                 if not exercises: 
+                   st.warning("Please select at least one exercise.")
+                 else:
+                   MET = MET_VALUES.get(exercises[0], 1)
+                   calories_burned = (MET * workout['weight'] * workout['duration']) / 60
+                   st.write(f"**Estimated Calories Burned:** {calories_burned:.2f} kcal")
+
+                
+         
+             with tab3:
+                 picture = st.file_uploader("Upload a picture of your workout", type=["jpg", "jpeg", "png"])
+                 if picture:
+                    st.image(picture, caption="Workout Picture", use_column_width=True)
+             
+                 note = st.text_area("Add a note about this workout")
+                 if st.button("Save Note"):
+                    st.success("Note saved!")
 #ABOUT PAGE
 elif menu == "🤔 ABOUT":
       st.header("ABOUT")
