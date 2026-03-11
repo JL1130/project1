@@ -185,7 +185,7 @@ elif menu == "✍️ PROGRESS TRACKER":
     if len(st.session_state.workouts) == 0:
         st.info("No workouts logged yet. Start logging your workouts in the WORKOUT PLANNER!")
     else:
-         for workout in st.session_state.workouts:
+         for i, workout in enumerate(st.session_state.workouts):
              tab1, tab2, tab3 = st.tabs(["Workout Details", "Calories Burned", "Workout Picture/Notes"])
              with tab1:
                  st.write(f"**Date:** {workout['date']}")
@@ -200,23 +200,23 @@ elif menu == "✍️ PROGRESS TRACKER":
 
              with tab2:
                  exercises = workout.get("exercises", [])
-
-                 if not exercises: 
-                   st.warning("Please select at least one exercise.")
-                 else:
+                 if exercises: 
                    MET = MET_VALUES.get(exercises[0], 1)
                    calories_burned = (MET * workout['weight'] * workout['duration']) / 60
                    st.write(f"**Estimated Calories Burned:** {calories_burned:.2f} kcal")
+                 else:
+                   st.warning("Please select at least one exercise.")
+                   
 
-                
-         
              with tab3:
-                 picture = st.file_uploader("Upload a picture of your workout", type=["jpg", "jpeg", "png"])
+                 picture = st.file_uploader("Upload a picture of your workout", 
+                  type=["jpg", "jpeg", "png"], key=f"workout_pic_{i}")
                  if picture:
                     st.image(picture, caption="Workout Picture", use_column_width=True)
              
-                 note = st.text_area("Add a note about this workout")
-                 if st.button("Save Note"):
+                 note = st.text_area("Add a note about this workout",
+                  key=f"workout_note_{i}")
+                 if st.button("Save Note", key=f"save_note_{i}"):
                     st.success("Note saved!")
 #ABOUT PAGE
 elif menu == "🤔 ABOUT":
